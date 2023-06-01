@@ -9,7 +9,6 @@ namespace src.Actions
         public string Barcode
         {
             get { return _barcode; }
-
         }
         public string Name
         {
