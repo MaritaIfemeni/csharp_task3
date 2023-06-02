@@ -3,7 +3,7 @@ namespace src.Actions
     public class Item
     {
 
-        private static string _barcode = "";
+        private string _barcode = "";
         private string _name;
         private int _quantity;
         public string Barcode

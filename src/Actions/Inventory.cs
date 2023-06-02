@@ -27,31 +27,58 @@ namespace src.Actions
 
         public bool AddItem(Item item, int quantity)
         {
-            //3. Method `AddItem` that takes two parameters (item and item quantity) and adds the item to the inventory. If the inventory reaches `maxCapacity`, the method should return false. Otherwise, it should add or replace the item in `items`.
+            if (items.Count < maxCapacity)
+            {
+                item.Quantity = quantity;
+                items.Add(item);
+                return true;
+            }
+            return false;
         }
-
         public bool RemoveItem(string barcode)
         {
-            //4. Method `RemoveItem` that takes a string parameter (item barcode) and removes the item from the inventory. If the item does not exist in the inventory, the method should return false. Otherwise, it should remove the item from items and return true.
+            foreach (Item item in items)
+            {
+                if (item.Barcode == barcode)
+                {
+                    items.Remove(item);
+                    return true;
+                }
+            }
+            return false;
         }
-
         public void IncreaseQuantity(string barcode, int quantity)
         {
-            // 5. Method `IncreaseQuantity` that takes an integer parameter and a string parameter (item barcode), and increase the amount of item in the inventory.
+            foreach (Item item in items)
+            {
+                if (item.Barcode == barcode)
+                {
+                    item.Quantity += quantity;
+                }
+            }
         }
 
         public void DecreaseQuantity(string barcode, int quantity)
         {
-            // 6. Method `DecreaseQuantity` that takes an integer parameter and a string parameter (item barcode), and decrease the amount of item in the inventory.
+            foreach (Item item in items)
+            {
+                if (item.Barcode == barcode)
+                {
+                    item.Quantity -= quantity;
+                }
+            }
         }
         public void ViewInventory()
         {
-            // Method called `ViewInventory` that prints the items (barcode, name, quantity) in the inventory to the console.
+            Console.WriteLine("Current inventory consists:");
+            foreach (Item item in items)
+            {
+                Console.WriteLine("Item name: " + item.Name + " Barcode: " + item.Barcode + " Quantity: " + item.Quantity);
+            }
         }
-        
         ~Inventory()
         {
-            // A destructor that prints a message to the console when the inventory is destroyed.
+            Console.WriteLine("Inventory is destroyed");
         }
     }
 }
