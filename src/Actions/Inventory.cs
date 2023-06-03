@@ -1,6 +1,6 @@
 namespace src.Actions
 {
-    public class Inventory
+    public class Inventory : IDisposable
     {
         private static readonly Inventory instance = new Inventory();
         private List<Item> items;
@@ -18,13 +18,11 @@ namespace src.Actions
         {
             get { return items; }
         }
-
         public int MaxCapacity
         {
             get { return maxCapacity; }
             set { maxCapacity = value; }
         }
-
         public bool AddItem(Item item, int quantity)
         {
             if (items.Count < maxCapacity)
@@ -57,15 +55,27 @@ namespace src.Actions
                 }
             }
         }
-
         public void DecreaseQuantity(string barcode, int quantity)
         {
+            List<Item> itemsToRemove = new List<Item>();
+
             foreach (Item item in items)
             {
                 if (item.Barcode == barcode)
                 {
-                    item.Quantity -= quantity;
+                    if (item.Quantity < quantity)
+                    {
+                        itemsToRemove.Add(item);
+                    }
+                    else
+                    {
+                        item.Quantity -= quantity;
+                    }
                 }
+            }
+            foreach (Item itemToRemove in itemsToRemove)
+            {
+                items.Remove(itemToRemove);
             }
         }
         public void ViewInventory()
@@ -76,7 +86,7 @@ namespace src.Actions
                 Console.WriteLine("Item name: " + item.Name + " Barcode: " + item.Barcode + " Quantity: " + item.Quantity);
             }
         }
-        ~Inventory()
+        public void Dispose()
         {
             Console.WriteLine("Inventory is destroyed");
         }
